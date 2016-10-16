@@ -6,26 +6,32 @@ public class Player : MonoBehaviour {
 	public bool hatOn;
 	public bool clockOn;
 	public float speed = 3f;
-	public float turnSmoothing = 15f;
+	public float turnSmoothing = 5f;
 	// A smoothing value for turning the player.
 
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
+		agent.speed = speed;
 	}
 
 	// Update is called once per frame
 	void Update() {
+		// TODO fix movement to local position
+		//float v = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+		//Vector3 FORWARD = transform.TransformDirection(Vector3.forward);
+
 		if ( Input.GetKey(KeyCode.LeftArrow) ) {
-			transform.position += Vector3.left * speed * Time.deltaTime;
+			transform.position += Vector3.left * agent.speed * Time.deltaTime;
 		}
 		if ( Input.GetKey(KeyCode.RightArrow) ) {
-			transform.position += Vector3.right * speed * Time.deltaTime;
+			transform.position += Vector3.right * agent.speed * Time.deltaTime;
 		}
 		if ( Input.GetKey(KeyCode.UpArrow) ) {
-			transform.position += new Vector3(0, 0, 1) * speed * Time.deltaTime;
+			transform.position += Vector3.forward * agent.speed * Time.deltaTime;
+			//transform.position += FORWARD * v;
 		}
 		if ( Input.GetKey(KeyCode.DownArrow) ) {
-			transform.position += new Vector3(0, 0, -1) * speed * Time.deltaTime;
+			transform.position += new Vector3(0, 0, -1) * agent.speed * Time.deltaTime;
 		}
 	}
 
@@ -52,7 +58,7 @@ public class Player : MonoBehaviour {
 		Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
 
 		// Create a rotation that is an increment closer to the target rotation from the player's rotation.
-		Quaternion newRotation = Quaternion.Lerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
+		Quaternion newRotation = Quaternion.Slerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
 
 		// Change the players rotation to this new rotation.
 		GetComponent<Rigidbody>().MoveRotation(newRotation);
