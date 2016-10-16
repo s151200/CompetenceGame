@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/lauraScene.unity
+- path: Assets/Scenes/sindriScene.unity
   isLoaded: 1
   isActive: 1

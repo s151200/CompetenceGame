@@ -5,7 +5,7 @@ public class Player : MonoBehaviour {
 	public NavMeshAgent agent;
 	public bool hatOn;
 	public bool clockOn;
-	public float speed;
+	public float speed = 3f;
 
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
