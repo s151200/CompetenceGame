@@ -7,8 +7,8 @@ public class Player : MonoBehaviour {
 	public bool clockOn;
 	public float speed = 3f;
 	public float turnSmoothing = 3f;
-	float rotateAroundZ;
-	float rotateDegrees = 6f;
+	private float rotateAroundZ;
+	public float rotateDegrees = 4f;
 	private Animator animator;
 	private bool isMoving;
 
@@ -20,32 +20,23 @@ public class Player : MonoBehaviour {
 		animator.SetBool("Idling", true);
 	}
 
-	// FixedUpdate is for physics based objects
-	void FixedUpdate() {
-		
-		if ( Input.GetKey(KeyCode.UpArrow) ) {
+	void Update() {
+		// MOVING FORWARD
+		if (Input.GetKey(KeyCode.UpArrow)) {
 			// transform.forward is the forward direction in LOCAL SPACE and then the agent goes forward relative to the agent's angle.
 			// Note: On the other hand Vector3.forward is in WORLD SPACE
+			animator.SetBool("Idling", false); // Start moving
 			transform.position += transform.forward * agent.speed * Time.deltaTime;
-			isMoving = true;
-			//Debug.Log("Up arrow");
 		}
-		if ( Input.GetKey(KeyCode.DownArrow) ) {
-			transform.position -= transform.forward * agent.speed * Time.deltaTime;
-			isMoving = true;
-			//Debug.Log("Down arrow");
+
+		// STOP
+		// Hammertime
+		if (Input.GetKeyUp(KeyCode.UpArrow)) {
+			animator.SetBool("Idling", true); // Stop moving
 		}
-		else if ( Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) ) {
-			animator.SetBool("Idling", true);//stop moving
-			isMoving = false;
-		}
-			
+
+		// ROTATING LEFT OR RIGHT
 		RotatePlayer();
-
-		if ( isMoving ) {
-			animator.SetBool("Idling", false);
-		}
-
 	}
 
 	// Rotates target around the z-axis
