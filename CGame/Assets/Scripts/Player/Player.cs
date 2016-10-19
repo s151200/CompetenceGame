@@ -15,7 +15,7 @@ public class Player : MonoBehaviour {
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
 		agent.speed = speed;
-		animator = GetComponentInChildren<Animator>();
+		animator = GetComponent<Animator>();
 		animator.SetBool("NonCombat", true);
 		animator.SetBool("Idling", true);
 	}
