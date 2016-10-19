@@ -15,6 +15,8 @@ public class EnemyFSM : CoroutineMachine {
 	public float slowDownTime = 2.0f;//worker caught the player
 	public float slowDownSpeed = 1.0f;
 
+	public float hatOnTime = 3f; //time the player is invisible
+
 	void Awake() {
 		// Setting up the references.
 		nav = GetComponent<NavMeshAgent>();
@@ -68,9 +70,13 @@ public class EnemyFSM : CoroutineMachine {
 			yield return new TransitionTo(StopState, DefaultTransition);
 		}
 
-		// if the player is close to the enemy, start chasing
-		if ( Vector3.Distance(this.transform.position, player.transform.position) <= chasingRadius ) {
+		// if the player is close to the enemy, start chasing. But if she has taken a hat they don't see her
+		if ( !player.hatOn && Vector3.Distance(this.transform.position, player.transform.position) <= chasingRadius ) {
 			yield return new TransitionTo(ChaseState, DefaultTransition);
+		}
+			
+		if ( player.hatOn ) {
+			yield return StartCoroutine(HatOn());
 		}
 
 		// otherwise keep patroling 
@@ -93,6 +99,12 @@ public class EnemyFSM : CoroutineMachine {
 			yield return new TransitionTo(StopState, DefaultTransition);
 		}
 
+		// if player has taken a hat, ignore her and start patroling again
+		if ( player.hatOn ) {
+			yield return new TransitionTo(StartState, DefaultTransition);
+			yield return StartCoroutine(HatOn());
+		}
+
 		// if a boss catches the player, game over
 		if ( caught && this.transform.tag == TagConstants.BOSS ) {
 			yield return new TransitionTo(EndState, DefaultTransition);
@@ -112,16 +124,19 @@ public class EnemyFSM : CoroutineMachine {
 	/// <returns>The state.</returns>
 	IEnumerator StopState() {
 		// stop moving for waitTime seconds (time was stopped)
+		nav.Stop();
 		yield return new WaitForSeconds(waitTime);
+		player.clockOn = false;
 		nav.Resume();
 
 		// back to patrol state
-		yield return new TransitionTo(PatrolState, DefaultTransition);
+		yield return new TransitionTo(StartState, DefaultTransition);
 	}
 
 	IEnumerator EndState() {
-		//Debug.Log("End state.");
+		//TODO load end screen
 		yield return new TransitionTo(null, DefaultTransition);
+		Application.LoadLevel(Application.loadedLevel);
 	}
 
 	/// <summary>
@@ -156,5 +171,10 @@ public class EnemyFSM : CoroutineMachine {
 		player.agent.speed -= slowDownSpeed;
 		yield return new WaitForSeconds(slowDownTime);
 		player.agent.speed += slowDownSpeed;
+	}
+		
+	IEnumerator HatOn() {
+		yield return new WaitForSeconds(hatOnTime);
+		player.hatOn = false;
 	}
 }

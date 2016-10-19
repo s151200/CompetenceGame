@@ -50,9 +50,11 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter(Collision other) {
 		if ( other.transform.tag == TagConstants.CLOCK ) {
 			clockOn = true;
+			other.gameObject.SetActive(false);
 		}
 		else if ( other.transform.tag == TagConstants.HAT ) {
 			hatOn = true;
+			other.gameObject.SetActive(false);
 		}
 	}
 }
