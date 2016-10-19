@@ -13,7 +13,6 @@ public class Door : MonoBehaviour {
 	[Header("Door Settings")]
 	[Tooltip("The start angle of the rotation (original position = 0 degrees)")]
 	public float StartAngle = 0.0F;
-	[Tooltip("The end angle of the rotation")]
 	public float EndAngle = 90.0F;
 	
 	public enum SideOfHinge
@@ -127,14 +126,8 @@ public class Door : MonoBehaviour {
 		transform.parent = hinge.transform;
 		hinge.transform.localEulerAngles = HingeRotCopy;
 		
-		// DEBUGGING
-		//GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		//cube.transform.position = HingePosCopy;
-		//cube.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-		//cube.GetComponent<Collider> ().tag = "DebugCube";
-		//cube.GetComponent<Renderer>().material.color = Color.black;
-		
 		// USER ERROR CODES
+		
 		if (Mathf.Abs(StartAngle) + Mathf.Abs(EndAngle) == 180 || Mathf.Abs(StartAngle) + Mathf.Abs(EndAngle) > 180)
 		{
 			UnityEditor.EditorUtility.DisplayDialog ("Error 001","Difference between StartAngle and EndAngle can't be >=180", "Ok", "");
@@ -146,12 +139,6 @@ public class Door : MonoBehaviour {
 		StartRot = Quaternion.Euler (0, -StartAngle, 0);
 		// Set 'EndRot' to be the rotation when door is moved.
 		EndRot = Quaternion.Euler(0, -EndAngle, 0);
-	}
-
-	// UPDATE FUNCTION
-	void Update ()
-	{
-
 	}
 
 	// OPEN FUNCTION
@@ -188,19 +175,4 @@ public class Door : MonoBehaviour {
 
 		}
 	}
-
-	// GUI FUNCTION
-	/*
-	void OnGUI ()
-	{
-		// Access InReach variable from raycasting script.
-		GameObject Player = GameObject.Find("Player");
-		Detection detection = Player.GetComponent<Detection>();
-
-		if (detection.InReach == true)
-		{
-			GUI.color = Color.white;
-			GUI.Box(new Rect(20, 20, 200, 25), "Press 'E' to open/close");
-		}
-	}*/
 }
