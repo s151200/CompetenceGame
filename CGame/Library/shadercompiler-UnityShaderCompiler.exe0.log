@@ -1,2 +1,4 @@
 Base path: F:/Forrit/Unity/Editor/Data
 Cmd: getPlatforms
+Cmd: preprocess
+  insize=805 outsize=1750 ok=1
