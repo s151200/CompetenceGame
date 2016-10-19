@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class EnemyFSM : CoroutineMachine {
+	private Animator anim;
 	private NavMeshAgent nav;
 	private Player player;
 	private bool caught;
@@ -19,6 +20,11 @@ public class EnemyFSM : CoroutineMachine {
 
 	void Awake() {
 		// Setting up the references.
+
+		// TODO SJW make animation control a bit more elegant in the code 
+		// when walking and talking are working (function calls, enums...etc)
+		anim = GetComponent<Animator>();
+		anim.SetTrigger("isWalking"); // Default animation of all enemies is walking
 		nav = GetComponent<NavMeshAgent>();
 		player = GameObject.FindGameObjectWithTag(TagConstants.PLAYER).GetComponent<Player>();
 	}
@@ -151,7 +157,6 @@ public class EnemyFSM : CoroutineMachine {
 		     from == PatrolState && patrolCount >= patrolWayPoints.Length ) {
 			patrolCount = 0;
 		}
-
 		//Debug.Log(string.Format("Transitioning from {0} to {1}", from.Method.Name, to == null ? "null" : to.Method.Name));
 		yield return null;
 	}
@@ -159,6 +164,9 @@ public class EnemyFSM : CoroutineMachine {
 	void OnCollisionEnter(Collision other) {
 		// player caught
 		if ( other.transform.tag == TagConstants.PLAYER ) {
+			//Debug.Log("BOSS CATCHES PLAYER");
+			nav.Stop(); // We want to stop the boss when he is about to yell at the player
+			anim.SetTrigger("isYelling"); // Boss yells at player when caught
 			caught = true;
 		}
 	}
