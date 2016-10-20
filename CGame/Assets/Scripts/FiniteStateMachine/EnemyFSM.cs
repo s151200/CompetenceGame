@@ -16,6 +16,7 @@ public class EnemyFSM : CoroutineMachine {
 	public float slowDownTime = 2.0f;//worker caught the player
 	public float slowDownSpeed = 1.0f;
 
+	public float yellAnimationTime = 4f; //yelling animation time
 	public float hatOnTime = 3f; //time the player is invisible
 
 	void Awake() {
@@ -131,18 +132,21 @@ public class EnemyFSM : CoroutineMachine {
 	IEnumerator StopState() {
 		// stop moving for waitTime seconds (time was stopped)
 		nav.Stop();
+		anim.enabled = false;
 		yield return new WaitForSeconds(waitTime);
 		player.clockOn = false;
 		nav.Resume();
+		anim.enabled = true;
+		anim.SetTrigger("isWalking");
 
 		// back to patrol state
 		yield return new TransitionTo(StartState, DefaultTransition);
 	}
 
 	IEnumerator EndState() {
-		//TODO load end screen
+		// to show the yelling animation we wait for a few seconds
+		yield return new WaitForSeconds(yellAnimationTime);
 		yield return new TransitionTo(null, DefaultTransition);
-		Application.LoadLevel(Application.loadedLevel);
 	}
 
 	/// <summary>
@@ -157,6 +161,13 @@ public class EnemyFSM : CoroutineMachine {
 		     from == PatrolState && patrolCount >= patrolWayPoints.Length ) {
 			patrolCount = 0;
 		}
+
+		// game over
+		if ( to == null ) {
+			//TODO load end screen
+			Application.LoadLevel(Application.loadedLevel);
+		}
+
 		//Debug.Log(string.Format("Transitioning from {0} to {1}", from.Method.Name, to == null ? "null" : to.Method.Name));
 		yield return null;
 	}

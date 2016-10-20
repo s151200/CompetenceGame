@@ -28,11 +28,9 @@ public class Timer : MonoBehaviour {
 			Application.LoadLevel(Application.loadedLevel);
 		}
 	}
-
-	/*
+		
 	public void AddExtraTime(int extraTime) {
 		startingTime += extraTime;
 	}
-	*/
 }
 
