@@ -19,6 +19,8 @@ public class EnemyFSM : CoroutineMachine {
 	public float yellAnimationTime = 4f; //yelling animation time
 	public float hatOnTime = 3f; //time the player is invisible
 
+
+
 	void Awake() {
 		// Setting up the references.
 
@@ -120,6 +122,7 @@ public class EnemyFSM : CoroutineMachine {
 			//player.transform.LookAt(this.transform);
 			yield return new TransitionTo(EndState, DefaultTransition);
 		}
+
 		// if a worker catches the player, slow him down and patrol from the start
 		else if ( caught && this.transform.tag == TagConstants.WORKER ) {
 			yield return StartCoroutine(SlowDownPlayer());
@@ -179,9 +182,16 @@ public class EnemyFSM : CoroutineMachine {
 	void OnCollisionEnter(Collision other) {
 		// player caught
 		if ( other.transform.tag == TagConstants.PLAYER ) {
-			nav.enabled = false;
-			anim.SetTrigger("isYelling"); // Enemies yells at player when caught
-			caught = true;
+
+			if(gameObject.tag == TagConstants.BOSS) {
+				anim.SetTrigger("isYelling"); // Enemies yells at player when caught
+				caught = true;
+			}
+
+			if(gameObject.tag == TagConstants.WORKER) {
+				Debug.Log("WORKER");
+				anim.SetTrigger("isYelling");
+			}
 		}
 	}
 
