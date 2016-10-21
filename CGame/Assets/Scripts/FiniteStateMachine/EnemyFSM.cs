@@ -63,7 +63,7 @@ public class EnemyFSM : CoroutineMachine {
 	/// </summary>
 	/// <returns>The state.</returns>
 	IEnumerator PatrolState() {
-
+		anim.SetTrigger("isWalking");
 		if ( Vector3.Distance(this.transform.position, patrolWayPoints[patrolCount].position) <= nav.stoppingDistance ) {
 			patrolCount++;
 			if ( patrolCount >= patrolWayPoints.Length ) {
@@ -99,6 +99,7 @@ public class EnemyFSM : CoroutineMachine {
 	/// <returns>The state.</returns>
 	IEnumerator ChaseState() {
 		// chase player 
+		nav.enabled = true;
 		nav.destination = player.transform.position;
 
 		// if player has taken a clock, move to StopState 
@@ -175,10 +176,12 @@ public class EnemyFSM : CoroutineMachine {
 	void OnCollisionEnter(Collision other) {
 		// player caught
 		if ( other.transform.tag == TagConstants.PLAYER ) {
-			//Debug.Log("BOSS CATCHES PLAYER");
-			nav.Stop(); // We want to stop the boss when he is about to yell at the player
-			anim.SetTrigger("isYelling"); // Boss yells at player when caught
+			Debug.Log("BOSS CATCHES PLAYER");
+			//nav.Stop(); // We want to stop the boss when he is about to yell at the player
+			nav.enabled = false;
+			anim.SetTrigger("isYelling"); // Enemies yells at player when caught
 			caught = true;
+			
 		}
 	}
 
