@@ -11,12 +11,12 @@ public class EnemyFSM : CoroutineMachine {
 	public int patrolCount = 0;
 	public float chasingRadius;
 	public float waitTime = 2.0f;//player took clock
-	public float timeAfterCaught = 3.0f; 
+	public float timeAfterCaught; 
 
 	public float slowDownTime = 2.0f;//worker caught the player
 	public float slowDownSpeed = 1.0f;
 
-	public float yellAnimationTime = 4f; //yelling animation time
+	public float yellAnimationTime; //yelling animation time
 	public float hatOnTime = 3f; //time the player is invisible
 
 
@@ -52,11 +52,14 @@ public class EnemyFSM : CoroutineMachine {
 		//give some seconds to the player to run away after being caught by a worker
 		if ( caught ) {
 			yield return new WaitForSeconds(timeAfterCaught);
+			anim.SetTrigger("isWalking");
+			nav.Resume();
 			caught = false;
 		}
 			
 		yield return new TransitionTo(PatrolState, DefaultTransition);
 	}
+		
 
 	/// <summary>
 	/// The enemy patrols continuously in its patrolWaiPoints. 
@@ -65,7 +68,9 @@ public class EnemyFSM : CoroutineMachine {
 	/// </summary>
 	/// <returns>The state.</returns>
 	IEnumerator PatrolState() {
+		
 		anim.SetTrigger("isWalking");
+
 		if ( Vector3.Distance(this.transform.position, patrolWayPoints[patrolCount].position) <= nav.stoppingDistance ) {
 			patrolCount++;
 			if ( patrolCount >= patrolWayPoints.Length ) {
@@ -101,7 +106,6 @@ public class EnemyFSM : CoroutineMachine {
 	/// <returns>The state.</returns>
 	IEnumerator ChaseState() {
 		// chase player 
-		nav.enabled = true;
 		nav.destination = player.transform.position;
 
 		// if player has taken a clock, move to StopState 
@@ -133,7 +137,7 @@ public class EnemyFSM : CoroutineMachine {
 	}
 	/// <summary>
 	/// Stops the enemy for waitTime seconds after the player 
-	/// stopped the time by taking a clock. 
+	/// stopped the time by taking a clock.
 	/// </summary>
 	/// <returns>The state.</returns>
 	IEnumerator StopState() {
@@ -182,16 +186,9 @@ public class EnemyFSM : CoroutineMachine {
 	void OnCollisionEnter(Collision other) {
 		// player caught
 		if ( other.transform.tag == TagConstants.PLAYER ) {
-
-			if(gameObject.tag == TagConstants.BOSS) {
-				anim.SetTrigger("isYelling"); // Enemies yells at player when caught
-				caught = true;
-			}
-
-			if(gameObject.tag == TagConstants.WORKER) {
-				Debug.Log("WORKER");
-				anim.SetTrigger("isYelling");
-			}
+			anim.SetTrigger("isYelling"); // Enemies yells at player when caught
+			caught = true;
+			nav.Stop();
 		}
 	}
 
