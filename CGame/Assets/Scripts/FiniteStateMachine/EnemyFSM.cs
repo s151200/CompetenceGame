@@ -115,6 +115,9 @@ public class EnemyFSM : CoroutineMachine {
 
 		// if a boss catches the player, game over
 		if ( caught && this.transform.tag == TagConstants.BOSS ) {
+			player.caught = true;
+			nav.Stop();
+			//player.transform.LookAt(this.transform);
 			yield return new TransitionTo(EndState, DefaultTransition);
 		}
 		// if a worker catches the player, slow him down and patrol from the start
@@ -176,12 +179,9 @@ public class EnemyFSM : CoroutineMachine {
 	void OnCollisionEnter(Collision other) {
 		// player caught
 		if ( other.transform.tag == TagConstants.PLAYER ) {
-			Debug.Log("BOSS CATCHES PLAYER");
-			//nav.Stop(); // We want to stop the boss when he is about to yell at the player
 			nav.enabled = false;
 			anim.SetTrigger("isYelling"); // Enemies yells at player when caught
 			caught = true;
-			
 		}
 	}
 

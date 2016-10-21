@@ -10,33 +10,36 @@ public class Player : MonoBehaviour {
 	private float rotateAroundZ;
 	public float rotateDegrees = 4f;
 	private Animator animator;
-	private bool isMoving;
+	public bool caught;
 
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
 		agent.speed = speed;
 		animator = GetComponent<Animator>();
-		animator.SetBool("NonCombat", true);
 		animator.SetBool("Idling", true);
 	}
 
 	void Update() {
-		// MOVING FORWARD
-		if (Input.GetKey(KeyCode.UpArrow)) {
-			// transform.forward is the forward direction in LOCAL SPACE and then the agent goes forward relative to the agent's angle.
-			// Note: On the other hand Vector3.forward is in WORLD SPACE
-			animator.SetBool("Idling", false); // Start moving
-			transform.position += transform.forward * agent.speed * Time.deltaTime;
-		}
+		if(!caught) {
+			// MOVING FORWARD
+			if (Input.GetKey(KeyCode.UpArrow)) {
+				// transform.forward is the forward direction in LOCAL SPACE and then the agent goes forward relative to the agent's angle.
+				// Note: On the other hand Vector3.forward is in WORLD SPACE
+				animator.SetBool("Idling", false); // Start moving
+				transform.position += transform.forward * agent.speed * Time.deltaTime;
+			}
 
-		// STOP
-		// Hammertime
-		if (Input.GetKeyUp(KeyCode.UpArrow)) {
-			animator.SetBool("Idling", true); // Stop moving
-		}
+			// STOP
+			// Hammertime
+			if (Input.GetKeyUp(KeyCode.UpArrow)) {
+				animator.SetBool("Idling", true); // Stop moving
+			}
 
-		// ROTATING LEFT OR RIGHT
-		RotatePlayer();
+			// ROTATING LEFT OR RIGHT
+			RotatePlayer();
+		} else {
+			animator.SetBool("Idling", true);
+		}
 	}
 
 	// Rotates target around the z-axis
