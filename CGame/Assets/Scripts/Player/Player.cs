@@ -11,12 +11,14 @@ public class Player : MonoBehaviour {
 	public float rotateDegrees = 4f;
 	private Animator animator;
 	public bool caught;
+	private Timer time;
 
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
 		agent.speed = speed;
 		animator = GetComponent<Animator>();
 		animator.SetBool("Idling", true);
+		time = GameObject.FindGameObjectWithTag(TagConstants.TIME).GetComponent<Timer>();
 	}
 
 	void Update() {
@@ -53,6 +55,7 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter(Collision other) {
 		if ( other.transform.tag == TagConstants.CLOCK ) {
 			clockOn = true;
+			time.AddExtraTime(2);
 			other.gameObject.SetActive(false);
 		}
 		else if ( other.transform.tag == TagConstants.HAT ) {

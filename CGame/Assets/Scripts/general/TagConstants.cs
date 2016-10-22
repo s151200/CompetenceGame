@@ -10,4 +10,5 @@ public class TagConstants {
 	public const string CLOCK = "Clock";
 	public const string HAT = "Hat";
 	public const string CAMERA = "MainCamera";
+	public const string TIME = "Time";
 }

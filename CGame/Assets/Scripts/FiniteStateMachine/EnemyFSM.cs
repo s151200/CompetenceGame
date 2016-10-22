@@ -56,7 +56,7 @@ public class EnemyFSM : CoroutineMachine {
 			nav.Resume();
 			caught = false;
 		}
-			
+
 		yield return new TransitionTo(PatrolState, DefaultTransition);
 	}
 		
