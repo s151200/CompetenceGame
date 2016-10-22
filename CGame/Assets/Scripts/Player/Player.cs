@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	private Animator animator;
 	public bool caught;
 	private Timer time;
+	private Material clock;
 
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour {
 		animator = GetComponent<Animator>();
 		animator.SetBool("Idling", true);
 		time = GameObject.FindGameObjectWithTag(TagConstants.TIME).GetComponent<Timer>();
+		//clock = GameObject.FindGameObjectWithTag(TagConstants.CLOCK).GetComponent<Material>();
 	}
 
 	void Update() {
@@ -56,6 +58,7 @@ public class Player : MonoBehaviour {
 		if ( other.transform.tag == TagConstants.CLOCK ) {
 			clockOn = true;
 			time.AddExtraTime(2);
+			//clock.SetFloat("Extrusion Amount", 0.05f);
 			other.gameObject.SetActive(false);
 		}
 		else if ( other.transform.tag == TagConstants.HAT ) {
