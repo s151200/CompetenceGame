@@ -2,7 +2,7 @@
 	Properties { //'public' variables
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Amount ("Extrusion Amount", Range(-0.05,0.05)) = 0 
+		_Amount ("Amount", Range(-0.05,0.05)) = 0 
 		_Reflection ("Reflection", Range(0,1)) = 1
 		_Gloss ("Gloss", Range(0,1)) = 1
 	}

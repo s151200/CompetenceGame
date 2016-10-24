@@ -12,9 +12,7 @@ public class Player : MonoBehaviour {
 	private Animator animator;
 	public bool caught;
 	private Timer time;
-	private Material[] clockMats;
-	private float amount;
-	private float inc;
+
 
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
@@ -22,15 +20,6 @@ public class Player : MonoBehaviour {
 		animator = GetComponent<Animator>();
 		animator.SetBool("Idling", true);
 		time = GameObject.FindGameObjectWithTag(TagConstants.TIME).GetComponent<Timer>();
-		/*
-		GameObject[] clocks = GameObject.FindGameObjectsWithTag(TagConstants.CLOCK);
-		clockMats = new Material[clocks.Length];
-		for ( int i = 0; i < clocks.Length; i++ ) {
-			clockMats[i] = clocks[i].GetComponent<Material>();
-		}
-		amount = -0.05f;
-		inc = 0.001f;
-		*/
 	}
 
 	void Update() {
@@ -54,8 +43,6 @@ public class Player : MonoBehaviour {
 		} else {
 			animator.SetBool("Idling", true);
 		}
-
-		//UpdateClocks();
 	}
 
 	// Rotates target around the z-axis
@@ -77,14 +64,5 @@ public class Player : MonoBehaviour {
 			other.gameObject.SetActive(false);
 		}
 	}
-
-	private void UpdateClocks() {
-		if ( amount >= 0.05f ) {
-			inc = inc * (-1);
-		}
-		amount += inc;
-		for ( int i = 0; i < clockMats.Length; i++ ) {
-			clockMats[i].SetFloat("Extrusion Amount", amount);
-		}
-	}
+		
 }
