@@ -11,11 +11,11 @@ public class Clock : MonoBehaviour {
 	void Start() {
 		mat = GetComponent<Renderer>().material;
 		amount = -0.05f;
-		inc = 0.001f;
+		inc = 0.003f;
 	}
 
 	void Update() {
-		if ( amount > 0.05f || amount < -0.05f) {
+		if ( amount > 0.07f || amount < -0.05f) {
 			inc = inc * (-1);
 		}
 		amount += inc;
