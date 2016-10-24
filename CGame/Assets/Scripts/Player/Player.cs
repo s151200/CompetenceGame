@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 	public NavMeshAgent agent;
@@ -66,6 +67,10 @@ public class Player : MonoBehaviour {
 
 			EnableHat(); // Hat is shown on top of player
 			Invoke("DisableHat", EnemyFSM.hatOnTime); // Disable the hat after hatOnTime seconds
+		}
+
+		else if( other.transform.tag == TagConstants.WIN) {
+			SceneManager.LoadScene("winScene");
 		}
 	}
 
