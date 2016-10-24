@@ -12,9 +12,10 @@ public class Player : MonoBehaviour {
 	private Animator animator;
 	public bool caught;
 	private Timer time;
-
+	public GameObject playerHat;
 
 	void Start() {
+		DisableHat(); // Hat is initilzed as hidden
 		agent = GetComponent<NavMeshAgent>();
 		agent.speed = speed;
 		animator = GetComponent<Animator>();
@@ -61,8 +62,19 @@ public class Player : MonoBehaviour {
 		}
 		else if ( other.transform.tag == TagConstants.HAT ) {
 			hatOn = true;
-			other.gameObject.SetActive(false);
+			other.gameObject.SetActive(false); // Collided hat in the scene disabled
+
+			EnableHat(); // Hat is shown on top of player
+			Invoke("DisableHat", EnemyFSM.hatOnTime); // Disable the hat after hatOnTime seconds
 		}
 	}
-		
+
+	void EnableHat() {
+		playerHat.active = true;
+	}
+
+	void DisableHat() {
+		playerHat.active = false;
+	}
+
 }

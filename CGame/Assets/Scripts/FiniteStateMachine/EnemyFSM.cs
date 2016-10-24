@@ -18,7 +18,7 @@ public class EnemyFSM : CoroutineMachine {
 	public float slowDownSpeed = 1.0f;
 
 	public float yellAnimationTime; //yelling animation time
-	public float hatOnTime = 3f; //time the player is invisible
+	public static float hatOnTime = 3f; //time the player is invisible
 
 
 
