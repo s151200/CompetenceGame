@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class EnemyFSM : CoroutineMachine {
 	private Animator anim;
@@ -158,6 +159,7 @@ public class EnemyFSM : CoroutineMachine {
 		// to show the yelling animation we wait for a few seconds
 		yield return new WaitForSeconds(yellAnimationTime);
 		yield return new TransitionTo(null, DefaultTransition);
+		
 	}
 
 	/// <summary>
@@ -175,8 +177,7 @@ public class EnemyFSM : CoroutineMachine {
 
 		// game over
 		if ( to == null ) {
-			//TODO load end screen
-			Application.LoadLevel(Application.loadedLevel);
+			SceneManager.LoadScene("endScene");
 		}
 
 		//Debug.Log(string.Format("Transitioning from {0} to {1}", from.Method.Name, to == null ? "null" : to.Method.Name));
