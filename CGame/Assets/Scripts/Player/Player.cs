@@ -14,8 +14,11 @@ public class Player : MonoBehaviour {
 	public bool caught;
 	private Timer time;
 	public GameObject playerHat;
+	public AudioSource clockTickingSound;
+	public AudioSource hatPickupSound;
 
 	void Start() {
+		//clockTickingSound = GetComponent<AudioSource>();
 		DisableHat(); // Hat is initilzed as hidden
 		agent = GetComponent<NavMeshAgent>();
 		agent.speed = speed;
@@ -59,10 +62,13 @@ public class Player : MonoBehaviour {
 		if ( other.transform.tag == TagConstants.CLOCK ) {
 			clockOn = true;
 			time.AddExtraTime(2);
+			clockTickingSound.Play();
 			other.gameObject.SetActive(false);
 		}
+
 		else if ( other.transform.tag == TagConstants.HAT ) {
 			hatOn = true;
+			hatPickupSound.Play();
 			other.gameObject.SetActive(false); // Collided hat in the scene disabled
 
 			EnableHat(); // Hat is shown on top of player

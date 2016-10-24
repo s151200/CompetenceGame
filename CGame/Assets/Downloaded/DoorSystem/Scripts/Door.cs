@@ -14,6 +14,7 @@ public class Door : MonoBehaviour {
 	[Tooltip("The start angle of the rotation (original position = 0 degrees)")]
 	public float StartAngle = 0.0F;
 	public float EndAngle = 90.0F;
+	private AudioSource doorSqueking;
 	
 	public enum SideOfHinge
 	{
@@ -41,6 +42,8 @@ public class Door : MonoBehaviour {
 	// START FUNCTION
 	void Start ()
 	{
+		doorSqueking = GetComponentInParent<AudioSource>();
+
 		// Create a hinge.
 		hinge = new GameObject();
 		hinge.name = "hinge";
@@ -155,8 +158,10 @@ public class Door : MonoBehaviour {
 			// Set 'finalRotation' to 'Endrot' when moving and to 'StartRot' when moving back.
 			Quaternion finalRotation = ((State == 0) ? EndRot : StartRot);
 
-    	// Make the door rotate until it is fully opened/closed.
-    	while (Mathf.Abs(Quaternion.Angle(finalRotation, hinge.transform.rotation)) > 0.01f)
+			
+			doorSqueking.Play();
+		// Make the door rotate until it is fully opened/closed.
+		while (Mathf.Abs(Quaternion.Angle(finalRotation, hinge.transform.rotation)) > 0.01f)
     	{
 			Running = true;
 			hinge.transform.rotation = Quaternion.Lerp (hinge.transform.rotation, finalRotation, Time.deltaTime * Speed);

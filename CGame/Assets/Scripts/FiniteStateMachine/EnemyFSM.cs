@@ -20,13 +20,15 @@ public class EnemyFSM : CoroutineMachine {
 	public float yellAnimationTime; //yelling animation time
 	public static float hatOnTime = 3f; //time the player is invisible
 
+	private AudioSource yelling;
+	private AudioSource singing;
 
 
 	void Awake() {
 		// Setting up the references.
 
-		// TODO SJW make animation control a bit more elegant in the code 
-		// when walking and talking are working (function calls, enums...etc)
+		yelling = GetComponentInParent<AudioSource>();
+		singing = GetComponentInParent<AudioSource>();
 		anim = GetComponent<Animator>();
 		anim.SetTrigger("isWalking"); // Default animation of all enemies is walking
 		nav = GetComponent<NavMeshAgent>();
@@ -157,6 +159,8 @@ public class EnemyFSM : CoroutineMachine {
 
 	IEnumerator EndState() {
 		// to show the yelling animation we wait for a few seconds
+
+		yelling.Play();
 		yield return new WaitForSeconds(yellAnimationTime);
 		yield return new TransitionTo(null, DefaultTransition);
 		
@@ -198,6 +202,7 @@ public class EnemyFSM : CoroutineMachine {
 	/// </summary>
 	/// <returns>The down player.</returns>
 	IEnumerator SlowDownPlayer() {
+		singing.Play();
 		player.agent.speed -= slowDownSpeed;
 		yield return new WaitForSeconds(slowDownTime);
 		player.agent.speed += slowDownSpeed;
