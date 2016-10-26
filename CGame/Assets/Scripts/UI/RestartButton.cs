@@ -12,6 +12,6 @@ public class RestartButton : MonoBehaviour {
 	}
 
 	void OnClickFunc() {
-		SceneManager.LoadScene("sindriScene");
+		SceneManager.LoadScene("mainScene");
 	}
 }
